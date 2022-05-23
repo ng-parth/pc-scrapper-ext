@@ -1,3 +1,4 @@
+let finalProfile = {};
 document.getElementById("test").addEventListener('click', () => {
   console.log("Popup DOM fully loaded and parsed");
 
@@ -64,7 +65,7 @@ document.getElementById("test").addEventListener('click', () => {
     let tableBody = '';
     const finalJson = queries.map(detail => {
       const {key, querySelector: qs, displayText, processValue } = detail;
-      qs && console.log(`${key}: `,  document.querySelector(qs));
+      // qs && console.log(`${key}: `,  document.querySelector(qs));
       let value = qs && document.querySelector(qs)?.innerHTML;
       if (processValue) value = processValue(qs);
       const returnVal = {key, value, displayText};
@@ -72,9 +73,9 @@ document.getElementById("test").addEventListener('click', () => {
       return returnVal;
     });
     const tableNode = document.getElementById('dataTable');
-    console.log('TableNode: ', tableNode)
+    // console.log('TableNode: ', tableNode)
     // tableNode.innerHTML = tableBody;
-    console.log('FinalJson: ', finalJson);
+    console.log('FinalJson: ', JSON.stringify(finalJson)) ;
     return finalJson;
   }
 
@@ -88,10 +89,68 @@ document.getElementById("test").addEventListener('click', () => {
     // alert('Doc ? '  + document.getElementById('dataTable').outerHTML);
     const tableNode = document.getElementById('dataTable');
     let tableBody = '';
-    results[0].map(({key, value}) => {
-      tableBody += `<tr><td>${key}</td><td>${value}</td></tr>`;
+    results[0].map(({key, value, displayText}) => {
+      finalProfile[key] = value;
+      tableBody += `<tr><td>${displayText}:</td><td>${value}</td></tr>`;
     });
+    tableBody += `<tr><td id="status">Status</td><td id="status1">Status 1</td></tr>`;
     tableNode.innerHTML = tableBody;
+    document.getElementById('saveBtn').style.display = 'inherit';
     // alert('TableNode: ' + tableBody);
   });
 });
+document.getElementById("saveBtn").addEventListener('click', () => {
+  function modifyStatus() {}
+  function makeApiCall(method = 'GET', url = 'https://save-my-links.herokuapp.com/api/bookmark', data = null) {
+    // 1. Create a new XMLHttpRequest object
+    let xhr = new XMLHttpRequest();
+
+    // 2. Configure it: GET-request for the URL /article/.../load
+    xhr.open(method, url);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+    // 3. Send the request over the network
+    xhr.send(data ? JSON.stringify(data) : data);
+
+    // 4. This will be called after the response is received
+    xhr.onload = function() {
+      if (xhr.status != 200) { // analyze HTTP status of the response
+        document.getElementById('status').style.background = 'gray';
+        document.getElementById('status').innerHTML = 'Starting request';
+        alert(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+      } else { // show the result
+        let responseKeys = xhr.response;
+        document.getElementById('status').style.background = 'green';
+        document.getElementById('status').innerHTML = responseKeys;
+        alert(`Response: ${responseKeys}`); // response is the server response
+        console.log('===> Api Response: ', xhr.response);
+      }
+    };
+    //
+    // xhr.onprogress = function(event) {
+    //   if (event.lengthComputable) {
+    //     alert(`Received ${event.loaded} of ${event.total} bytes`);
+    //   } else {
+    //     alert(`Received ${event.loaded} bytes`); // no Content-Length
+    //   }
+    //
+    // };
+
+    xhr.onerror = function() {
+      document.getElementById('status').innerHTML = 'Req failed';
+      document.getElementById('status').style.background = 'red';
+      alert("Request failed");
+    };
+  }
+  chrome.tabs.executeScript({
+    code: '(' + modifyStatus + ')();' //argument here is a string but function.toString() returns function's code
+  }, (results) => {
+    //Here we have just the innerHTML and not DOM structure
+
+    document.getElementById('status').style.background = 'gray';
+    document.getElementById('status').innerHTML = `Starting request: ${finalProfile || 'No profile data'}` ;
+    makeApiCall('POST', 'http://localhost:8085/api/p-club/profile', finalProfile || {profile:'No profile Data'});
+    document.getElementById('status1').style.background = 'red'
+  });
+})
+
