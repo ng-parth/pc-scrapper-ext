@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "PC Scrapper",
-  "description": "This extension will analyze a page using GTmetrix",
+  "description": "This extension will analyze panchal club profile and extract data to externa endpoint",
   "version": "1.0",
 
   "browser_action": {
