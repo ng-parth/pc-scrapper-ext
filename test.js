@@ -6,10 +6,11 @@ document.getElementById("test").addEventListener('click', () => {
     //You can play with your DOM here or check URL against your regex
     console.log('Tab script:');
     // console.log(document.body);                   body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(3) > font
-    const surname = document.querySelector('body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(3) > font')?.innerHTML;
-    console.log('Surame: ', surname);
+    // const surname = document.querySelector('body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(3) > font')?.innerHTML;
+    // console.log('Surame: ', surname);
     const queries = [
       {key: 'id', displayText: 'Id', querySelector: 'body > table:nth-child(4) > tbody > tr > td > p > b > font'},
+      {key: 'idText', displayText: 'Profile', querySelector: 'body > table:nth-child(4) > tbody > tr > td > p > b > font'},
       {key: 'name', displayText: 'Name', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(3) > td:nth-child(2) > font'},
       {key: 'surname', displayText: 'Surname', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(3) > font'},
       {key: 'age', displayText: 'Age', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(4) > td:nth-child(2) > font'},
@@ -32,7 +33,10 @@ document.getElementById("test").addEventListener('click', () => {
       {key: 'specs', displayText: 'Specs', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(12) > td:nth-child(1) > font'},
       {key: 'mangalShani', displayText: 'Mangal/Shani?', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(12) > td:nth-child(2) > font'},
       {key: 'aboutMe', displayText: 'About Me', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(13) > td:nth-child(2) > p > font'},
-      {key: 'imageUrl', displayText: 'Image Url', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(1) > img', processValue: qs => qs && document.querySelector(qs)?.innerHTML },
+      {key: 'imageUrl', displayText: 'Image Url', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(1) > img', processValue: qs => qs && document.querySelector(qs)?.src },
+      {key: 'address', displayText: 'Address', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(15) > td > p > font' },
+      {key: 'contactNo', displayText: 'Contact No', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(16) > td:nth-child(2) > font' },
+      {key: 'email', displayText: 'Email', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(16) > td:nth-child(3) > font > a' },
 
     ]
     // const extraDetails =
@@ -93,6 +97,8 @@ document.getElementById("test").addEventListener('click', () => {
       finalProfile[key] = value;
       tableBody += `<tr><td>${displayText}:</td><td>${value}</td></tr>`;
     });
+    finalProfile.status = true;
+    finalProfile.connectionStatus = 'SHORTLISTED';
     tableBody += `<tr><td id="status">Status</td><td id="status1">Status 1</td></tr>`;
     tableNode.innerHTML = tableBody;
     document.getElementById('saveBtn').style.display = 'inherit';
@@ -101,7 +107,7 @@ document.getElementById("test").addEventListener('click', () => {
 });
 document.getElementById("saveBtn").addEventListener('click', () => {
   function modifyStatus() {}
-  function makeApiCall(method = 'GET', url = 'https://save-my-links.herokuapp.com/api/bookmark', data = null) {
+  function makeApiCall(method = 'GET', url = '', data = null) {
     // 1. Create a new XMLHttpRequest object
     let xhr = new XMLHttpRequest();
 
@@ -116,13 +122,13 @@ document.getElementById("saveBtn").addEventListener('click', () => {
     xhr.onload = function() {
       if (xhr.status != 200) { // analyze HTTP status of the response
         document.getElementById('status').style.background = 'gray';
-        document.getElementById('status').innerHTML = 'Starting request';
+        document.getElementById('status').innerHTML = 'Request Failed';
         alert(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
       } else { // show the result
         let responseKeys = xhr.response;
         document.getElementById('status').style.background = 'green';
-        document.getElementById('status').innerHTML = responseKeys;
-        alert(`Response: ${responseKeys}`); // response is the server response
+        document.getElementById('status').innerHTML = 'Request Success';
+        alert(`Saved successfully.`); // response is the server response
         console.log('===> Api Response: ', xhr.response);
       }
     };
@@ -149,7 +155,8 @@ document.getElementById("saveBtn").addEventListener('click', () => {
 
     document.getElementById('status').style.background = 'gray';
     document.getElementById('status').innerHTML = `Starting request: ${finalProfile || 'No profile data'}` ;
-    makeApiCall('POST', 'http://localhost:8085/api/p-club/profile', finalProfile || {profile:'No profile Data'});
+    makeApiCall('POST', 'http://localhost:8090/api/p-club/profile', finalProfile || {profile:'No profile Data'});
+    // makeApiCall('POST', 'http://guarded-ridge-6883.herokuapp.com/api/p-club/profile', finalProfile || {profile:'No profile Data'});
     document.getElementById('status1').style.background = 'red'
   });
 })
