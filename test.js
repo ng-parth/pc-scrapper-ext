@@ -8,8 +8,12 @@ document.getElementById("test").addEventListener('click', () => {
     // console.log(document.body);                   body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(3) > font
     // const surname = document.querySelector('body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(3) > font')?.innerHTML;
     // console.log('Surame: ', surname);
+    const idQuerySelector = 'body > table:nth-child(4) > tbody > tr > td > p > b > font';
+    const paginationTableSelector = 'body > table:nth-child(4)'
+    let clonedPaginationNode;
     const queries = [
-      {key: 'id', displayText: 'Id', querySelector: 'body > table:nth-child(4) > tbody > tr > td > p > b > font'},
+      {key: 'id', displayText: 'Id', querySelector: idQuerySelector},
+      // {key: 'id', displayText: 'Id', querySelector: 'body > table:nth-child(5) > tbody > tr > td > p > b > font'},
       {key: 'idText', displayText: 'Profile', querySelector: 'body > table:nth-child(4) > tbody > tr > td > p > b > font'},
       {key: 'name', displayText: 'Name', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(3) > td:nth-child(2) > font'},
       {key: 'surname', displayText: 'Surname', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(3) > font'},
@@ -38,7 +42,12 @@ document.getElementById("test").addEventListener('click', () => {
       {key: 'contactNo', displayText: 'Contact No', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(16) > td:nth-child(2) > font' },
       {key: 'email', displayText: 'Email', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(16) > td:nth-child(3) > font > a' },
 
-    ]
+    ];
+    if (!document.querySelector(idQuerySelector) && document.querySelector('body > table:nth-child(4) > tbody > tr').children.length === 3) {
+      const paginationNode = document.querySelector(paginationTableSelector)
+      clonedPaginationNode = paginationNode.cloneNode(true);
+      paginationNode.remove();
+    }
     // const extraDetails =
     // const finalJson = {
     //   candidate: {
