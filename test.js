@@ -114,8 +114,8 @@ document.getElementById("test").addEventListener('click', () => {
       finalProfile[key] = value;
       tableBody += `<tr><td>${displayText}:</td><td>${value}</td></tr>`;
     });
-    finalProfile.status = true;
-    finalProfile.connectionStatus = 'SHORTLISTED';
+    // finalProfile.status = true;
+    // finalProfile.connectionStatus = 'SHORTLISTED';
     tableBody += `<tr><td id="status">Status</td><td id="status1">Status 1</td></tr>`;
     tableNode.innerHTML = tableBody;
     document.getElementById('saveBtn').style.display = 'inherit';
