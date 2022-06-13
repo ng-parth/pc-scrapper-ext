@@ -12,9 +12,17 @@ document.getElementById("test").addEventListener('click', () => {
     const paginationTableSelector = 'body > table:nth-child(4)'
     let clonedPaginationNode;
     const queries = [
-      {key: 'id', displayText: 'Id', querySelector: idQuerySelector},
+      {key: 'idText', displayText: 'Profile', querySelector: idQuerySelector},
       // {key: 'id', displayText: 'Id', querySelector: 'body > table:nth-child(5) > tbody > tr > td > p > b > font'},
-      {key: 'idText', displayText: 'Profile', querySelector: 'body > table:nth-child(4) > tbody > tr > td > p > b > font'},
+      {key: 'id', displayText: 'Id', querySelector: idQuerySelector, processValue: qs => {
+          const htmlString = document.querySelector(qs)?.innerHTML;
+          const htmlArr = htmlString.split(':-&nbsp;&nbsp;PROFILE OF ');
+          if (htmlArr.length === 2) {
+            return htmlArr[0].replace('ID NO-', '');
+          } else {
+            return htmlString;
+          }
+        }},
       {key: 'name', displayText: 'Name', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(3) > td:nth-child(2) > font'},
       {key: 'surname', displayText: 'Surname', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(3) > font'},
       {key: 'age', displayText: 'Age', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(4) > td:nth-child(2) > font'},
@@ -31,14 +39,14 @@ document.getElementById("test").addEventListener('click', () => {
       {key: 'sisters', displayText: 'Sisters', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(8) > td:nth-child(4) > font'},
       {key: 'familyIncome', displayText: 'Family Income', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(9) > td:nth-child(3) > font'},
       {key: 'personalIncome', displayText: 'Personal Income', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(9) > td:nth-child(5) > font'},
-      {key: 'birthDate', displayText: 'Birth Date', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(11) > td:nth-child(1) > font'},
-      {key: 'birthTime', displayText: 'Birth Time', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(11) > td:nth-child(2) > font'},
-      {key: 'birthPlace', displayText: 'Birth Place', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(11) > td:nth-child(3) > font'},
-      {key: 'specs', displayText: 'Specs', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(12) > td:nth-child(1) > font'},
-      {key: 'mangalShani', displayText: 'Mangal/Shani?', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(12) > td:nth-child(2) > font'},
+      {key: 'birthDate', displayText: 'Birth Date', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(11) > td:nth-child(1) > font', processValue: qs => qs && document.querySelector(qs)?.innerHTML.replace('D.O.B.-&nbsp;\n      ','')},
+      {key: 'birthTime', displayText: 'Birth Time', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(11) > td:nth-child(2) > font', processValue: qs => qs && document.querySelector(qs)?.innerHTML.replace('BIRTH\n      TIME:-', '')},
+      {key: 'birthPlace', displayText: 'Birth Place', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(11) > td:nth-child(3) > font', processValue: qs => qs && document.querySelector(qs)?.innerHTML.replace('BIRTH\n      PLACE:-', '')},
+      {key: 'specs', displayText: 'Specs', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(12) > td:nth-child(1) > font', processValue: qs => qs && document.querySelector(qs)?.innerHTML.replace('SPECT:-', '')},
+      {key: 'mangalShani', displayText: 'Mangal/Shani?', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(12) > td:nth-child(2) > font', processValue: qs => qs && document.querySelector(qs)?.innerHTML.replace('MANGAL/SHANI:-', '')},
       {key: 'aboutMe', displayText: 'About Me', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(13) > td:nth-child(2) > p > font'},
       {key: 'imageUrl', displayText: 'Image Url', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(1) > img', processValue: qs => qs && document.querySelector(qs)?.src },
-      {key: 'address', displayText: 'Address', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(15) > td > p > font' },
+      {key: 'address', displayText: 'Address', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(15) > td > p > font', processValue: qs => qs && document.querySelector(qs)?.innerHTML.replace('ADDRESS:-     ','')},
       {key: 'contactNo', displayText: 'Contact No', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(16) > td:nth-child(2) > font' },
       {key: 'email', displayText: 'Email', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(16) > td:nth-child(3) > font > a' },
 
