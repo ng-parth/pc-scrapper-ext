@@ -5,9 +5,6 @@ document.getElementById("test").addEventListener('click', () => {
   function modifyDOM() {
     //You can play with your DOM here or check URL against your regex
     console.log('Tab script:');
-    // console.log(document.body);                   body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(3) > font
-    // const surname = document.querySelector('body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(3) > font')?.innerHTML;
-    // console.log('Surame: ', surname);
     const idQuerySelector = 'body > table:nth-child(4) > tbody > tr > td > p > b > font';
     const paginationTableSelector = 'body > table:nth-child(4)'
     let clonedPaginationNode;
@@ -45,7 +42,8 @@ document.getElementById("test").addEventListener('click', () => {
       {key: 'specs', displayText: 'Specs', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(12) > td:nth-child(1) > font', processValue: qs => qs && document.querySelector(qs)?.innerHTML.replace('SPECT:-', '')},
       {key: 'mangalShani', displayText: 'Mangal/Shani?', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(12) > td:nth-child(2) > font', processValue: qs => qs && document.querySelector(qs)?.innerHTML.replace('MANGAL/SHANI:-', '')},
       {key: 'aboutMe', displayText: 'About Me', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(13) > td:nth-child(2) > p > font'},
-      {key: 'imageUrl', displayText: 'Image Url', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(1) > img', processValue: qs => qs && document.querySelector(qs)?.src },
+      // {key: 'imageUrl', displayText: 'Image Url', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(1) > img', processValue: qs => qs && document.querySelector(qs)?.src },
+      {key: 'originalImageUrl', displayText: 'Original Image Url', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(2) > td:nth-child(1) > img', processValue: qs => qs && document.querySelector(qs)?.src },
       {key: 'address', displayText: 'Address', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(15) > td > p > font', processValue: qs => qs && document.querySelector(qs)?.innerHTML.replace('ADDRESS:-\n     ','')},
       {key: 'contactNo', displayText: 'Contact No', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(16) > td:nth-child(2) > font' },
       {key: 'email', displayText: 'Email', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(16) > td:nth-child(3) > font > a' },
