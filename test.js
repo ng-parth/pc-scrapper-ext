@@ -47,7 +47,14 @@ document.getElementById("test").addEventListener('click', () => {
       {key: 'address', displayText: 'Address', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(15) > td > p > font', processValue: qs => qs && document.querySelector(qs)?.innerHTML.replace('ADDRESS:-\n     ','')},
       {key: 'contactNo', displayText: 'Contact No', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(16) > td:nth-child(2) > font' },
       {key: 'email', displayText: 'Email', querySelector: 'body > table:nth-child(5) > tbody > tr:nth-child(16) > td:nth-child(3) > font > a' },
-
+      {key: 'gender', displayText: 'Gender', querySelector: 'table > tbody > tr > td:nth-child(1) > font > b:nth-child(2)', processValue: qs => {
+          const gender = clonedPaginationNode?.querySelector(qs)?.innerHTML;
+          // console.log('Gender: ', gender);
+          if (gender?.trim().toLowerCase() === 'male') return 'Male';
+          if (gender?.trim().toLowerCase() === 'female') return 'Female';
+          return 'Default';
+        }
+      },
     ];
     if (!document.querySelector(idQuerySelector) && document.querySelector('body > table:nth-child(4) > tbody > tr').children.length === 3) {
       const paginationNode = document.querySelector(paginationTableSelector)
