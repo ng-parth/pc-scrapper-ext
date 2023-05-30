@@ -171,7 +171,7 @@ document.getElementById("saveBtn").addEventListener('click', () => {
     document.getElementById('status').style.background = 'gray';
     document.getElementById('status').innerHTML = `Starting request: ${finalProfile || 'No profile data'}` ;
     // makeApiCall('POST', 'http://localhost:8090/api/p-club/profile', finalProfile || {profile:'No profile Data'});
-    makeApiCall('POST', 'http://guarded-ridge-6883.herokuapp.com/api/p-club/profile', finalProfile || {profile:'No profile Data'});
+    makeApiCall('POST', 'https://guarded-ridge-6883.up.railway.app/api/p-club/profile', finalProfile || {profile:'No profile Data'});
     document.getElementById('status1').style.background = 'red'
   });
 })
